@@ -102,7 +102,7 @@ class Blockchain(object):
     def register_node(self, address):
         """
         Add a new node to the list of nodes
-        :param address: <str> Address of node. Eg. 'http://192.168.0.5:5000'
+        :param address: <str> Address of node. Eg. 'http://192.168.0.10:8080'
         :return: None
         """
 
@@ -144,10 +144,10 @@ class Blockchain(object):
         neighbours = self.nodes
         new_chain = None
 
-        # We're only looking for chains longer than ours
+        # Only looking for chains longer than this
         max_length = len(self.chain)
 
-        # Grab and verify the chains from all the nodes in our network
+        # Grab and verify the chains from all the nodes in the network
         for node in neighbours:
             response = requests.get(f'http://{node}/chain')
 
@@ -160,7 +160,7 @@ class Blockchain(object):
                     max_length = length
                     new_chain = chain
 
-        # Replace our chain if we discovered a new, valid chain longer than ours
+        # Replace the chain if a new, valid chain longer than this is discovered
         if new_chain:
             self.chain = new_chain
             return True
@@ -185,7 +185,7 @@ def mine():
     last_proof = last_block['proof']
     proof = blockchain.proof_of_work(last_proof)
 
-    # We must receive a reward for finding the proof.
+    # Reward for finding the proof.
     # The sender is "0" to signify that this node has mined a new coin.
     blockchain.new_transaction(
         sender="0",
